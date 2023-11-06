@@ -14,12 +14,12 @@ import com.example.Library.Management.Systems.Exceptions.MaxBooksAlreadyIssued;
 import com.example.Library.Management.Systems.Repository.BookRepository;
 import com.example.Library.Management.Systems.Repository.CardRepository;
 import com.example.Library.Management.Systems.Repository.TransactionRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import org.hibernate.annotations.CurrentTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -104,6 +104,7 @@ public class TransactionService {
 
         return "The book with bookId "+bookId+" has been issued " +
                 "to card with "+cardId;
+
     }
 
 
@@ -117,11 +118,11 @@ public class TransactionService {
 
         Transaction transaction = transactionRepository.findTransactionByBookAndCardAndTransactionStatus(book,card,TransactionStatus.ISSUED);
 
-        LocalDateTime issueDate = transaction.getCreatedOn();
+        Date issueDate = transaction.getCreatedOn();
 
         //predefined method that you can use to calculate days
-        long Seconds = Math.abs(LocalDateTime.now().getSecond() - issueDate.getSecond());
-        long days = TimeUnit.DAYS.convert(Seconds,TimeUnit.SECONDS);
+        long milliSeconds = Math.abs(System.currentTimeMillis() - issueDate.getTime());
+        long days = TimeUnit.DAYS.convert(milliSeconds,TimeUnit.MILLISECONDS);
 
         int fineAmount = 0;
         if(days>15){
@@ -132,7 +133,7 @@ public class TransactionService {
 
         newTransaction.setTransactionStatus(TransactionStatus.COMPLETED);
 
-        newTransaction.setReturnDate(LocalDateTime.now());
+        newTransaction.setReturnDate(Date.valueOf(LocalDate.now()));
         newTransaction.setFine(fineAmount);
 
         //setting the foreign keys
@@ -147,7 +148,7 @@ public class TransactionService {
 
         transactionRepository.save(newTransaction);
 
-        return "book has been returned. ";
+          return "book has been returned. ";
 
 
     }

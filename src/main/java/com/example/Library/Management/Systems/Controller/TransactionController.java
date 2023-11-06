@@ -1,7 +1,6 @@
 package com.example.Library.Management.Systems.Controller;
 
 
-import com.example.Library.Management.Systems.Entities.Transaction;
 import com.example.Library.Management.Systems.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
