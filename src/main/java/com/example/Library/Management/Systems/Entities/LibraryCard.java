@@ -1,6 +1,7 @@
 package com.example.Library.Management.Systems.Entities;
 
 import com.example.Library.Management.Systems.Enums.CardStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class LibraryCard {
 
     @OneToOne
     @JoinColumn
+    @JsonIgnore
     private Student student; //This is acting as a FK of the Library Card table
     //This variable is to be put in mappedBy attribute in the parent class
 
